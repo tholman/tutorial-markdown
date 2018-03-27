@@ -1,0 +1,20 @@
+{
+  "name": "tutorial-markdown",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/tholman/tutorial-markdown.git",
+  "author": "Tim Holman <timothy.w.holman@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "build:prod": "./node_modules/.bin/webpack -p",
+    "watch": "./node_modules/.bin/webpack --watch"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13"
+  }
+}

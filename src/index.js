@@ -7,12 +7,24 @@ class TutorialMarkdownPlayer {
   constructor(options) {
     
     if( !options.editor ) {
-      
+
     }
 
     this.codeManager = new CodeManager();
+
     this.editorManager = new EditorManager();
-    this.eventManager = new EventManager();
+
+    this.eventManager = new EventManager({
+      onTrigger: 
+    });
+  }
+
+  handleCodeTrigger() {
+
+  }
+
+  handleCodeChange() {
+    
   }
 
 }

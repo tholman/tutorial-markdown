@@ -9,19 +9,21 @@ const config = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
+  mode: 'development',
   module: {
-  rules: [{
-      test: /\.js$/,
-      include: /src/,
-      exclude: /node_modules/,
-      use: {
-        loader: "babel-loader",
-        options: {
-          presets: ['env']
-        } 
+    rules: [{
+        test: /\.js$/,
+        include: /src/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['env']
+          } 
+        }
       }
-    }
-  ]}
+    ]
+  }
 };
 
 module.exports = config;

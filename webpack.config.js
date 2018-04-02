@@ -1,17 +1,21 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const config = {
   context: path.resolve(__dirname, "src"),
   entry: {
-    app: './index.js'
+    "app": './index.js',
+    "editor.worker": 'monaco-editor/esm/vs/editor/editor.worker.js'
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    library: 'TutorialMarkdownPlayer'
   },
   mode: 'development',
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.js$/,
         include: /src/,
         exclude: /node_modules/,
@@ -21,9 +25,19 @@ const config = {
             presets: ['env']
           } 
         }
+      },{
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       }
     ]
-  }
+  },
+  plugins: [
+      // Ignore require() calls in vs/language/typescript/lib/typescriptServices.js
+      new webpack.IgnorePlugin(
+          /^((fs)|(path)|(os)|(crypto)|(source-map-support))$/,
+          /vs\/language\/typescript\/lib/
+      )
+  ]
 };
 
 module.exports = config;

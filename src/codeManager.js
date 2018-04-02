@@ -1,11 +1,10 @@
 /**
  * Code Manager, pieces together the code samples from the tutorial element
  */
- 
+
 class CodeManager {
 
   constructor(options) {
-    console.log("hi");
   }
 }
 

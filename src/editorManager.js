@@ -1,10 +1,39 @@
 
+// import only required items from below list
+// https://github.com/Microsoft/monaco-editor-samples/blob/master/browser-esm-webpack-small/index.js
+
+import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js';
+
 class EditorManager {
 
   constructor(options) {
-    console.log("2");
+    
+    // if( !options.editorElement ) {
+    //   throw "You need to define an editor element.";
+    // }
+
+    self.MonacoEnvironment = {
+      getWorkerUrl: function (moduleId, label) {
+        return './editor.worker.bundle.js';
+      }
+    }
+
+
+    this.editor = monaco.editor.create(document.getElementById('code-area'), {
+      value: [
+          'function x() {',
+          '\tconsole.log("Hello world!");',
+          '}'
+      ].join('\n'),
+      language: 'javascript'
+    });
+
+    console.log(this.editor);
+
   }
 }
+
 
 export default EditorManager;
 

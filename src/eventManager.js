@@ -6,6 +6,11 @@
 class EventManager {
 
   constructor(options) {
+    window.addEventListener('scroll', this.onContentScroll);
+  }
+
+  onContentScroll(event) {
+    console.log(event);
   }
 }
 

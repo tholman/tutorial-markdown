@@ -5,14 +5,12 @@ import EventManager from './eventManager';
 class TutorialMarkdownPlayer {
 
   constructor(options) {
-    
-    // if( !options.editor ) {
 
-    // }
+    // TODO: be defensive on options
 
-    this.codeManager = new CodeManager();
-    this.editorManager = new EditorManager();
-    this.eventManager = new EventManager();
+    this.codeManager = new CodeManager(options);
+    this.editorManager = new EditorManager(options);
+    this.eventManager = new EventManager(options);
   }
 }
 

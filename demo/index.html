@@ -14,6 +14,179 @@
     <!-- CSS -->
    <!--  <link href="/css/styles.css" rel="stylesheet" type="text/css">
     <link href="/css/code-theme.css" rel="stylesheet" type="text/css"> -->
+    <style>
+
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          background: #fff;
+          font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+          margin: 0px;
+        }
+
+        header {
+          width: 100%;
+          font-size: 14px;
+          color: #222;
+          padding: 16px;
+          font-weight: bold;
+          -webkit-font-smoothing: antialiased;
+          border-bottom: 1px solid #ddd;
+          position: fixed;
+          background: #fff;
+          top: 0px;
+        }
+
+        header a {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .wrapper {
+          max-width: 900px;
+          margin: auto;
+        }
+
+        .wrapper.tutorials {
+          display: flex;
+        }
+
+        .technical-sidebar {
+          width: 440px;
+          height: calc(100vh - 65px);
+          position: sticky;
+          top: 65px;
+          padding-right: 40px;
+
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .send-it {
+          background: none;
+          border: 0px;
+          height: 30px;
+          display: block;
+          position: absolute;
+          right: -1px;
+          border-top: 15px solid transparent;
+          border-bottom: 15px solid transparent;
+          border-right: 15px solid #ccc;
+          border-left: 15px solid transparent;
+          cursor: pointer;
+        }
+
+        .code-area, iframe {
+          width: 320px;
+          height: 240px;
+        }
+
+        iframe {
+          border: none;
+          height: 320px;
+          background: #f9f9f9;
+        }
+
+        .tutorial {
+          padding-left: 40px;
+          flex-shrink: 1000000; // TODO: Why?
+        }
+
+        .content {
+          padding-left: 40px;
+          padding-top: 40px;
+          padding-bottom: 50vh;
+          border-left: 1px solid #ddd;
+        }
+
+        h1 {
+          font-size: 20px;
+          margin-top: 40px;
+        }
+
+        p {
+          font-size: 12px;
+          line-height: 1.3em;
+          margin-bottom: 25px;
+        }
+
+        img {
+          width: 100%;
+        }
+
+        .left {
+          float: left;
+        }
+
+        .right {
+          float: right;
+        }
+
+        .content {}
+
+        .tmd {
+          display: none;
+        }
+
+        .decorationsOverviewRuler {
+          display: none;
+        }
+
+        .grid-wrapper {
+          margin-top: 90px;
+          columns: 300px auto;
+          column-gap: 20px;
+        }
+.highlight .hll { background-color: #f9f9f9 }
+.highlight  { background: #f9f9f9; }
+.highlight .c { color: #008000 } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #0000ff } /* Keyword */
+.highlight .ch { color: #008000 } /* Comment.Hashbang */
+.highlight .cm { color: #008000 } /* Comment.Multiline */
+.highlight .cp { color: #0000ff } /* Comment.Preproc */
+.highlight .cpf { color: #008000 } /* Comment.PreprocFile */
+.highlight .c1 { color: #008000 } /* Comment.Single */
+.highlight .cs { color: #008000 } /* Comment.Special */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gh { font-weight: bold } /* Generic.Heading */
+.highlight .gp { font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { font-weight: bold } /* Generic.Subheading */
+.highlight .kc { color: #0000ff } /* Keyword.Constant */
+.highlight .kd { color: #0000ff } /* Keyword.Declaration */
+.highlight .kn { color: #0000ff } /* Keyword.Namespace */
+.highlight .kp { color: #0000ff } /* Keyword.Pseudo */
+.highlight .kr { color: #0000ff } /* Keyword.Reserved */
+.highlight .kt { color: #2b91af } /* Keyword.Type */
+.highlight .s { color: #a31515 } /* Literal.String */
+.highlight .nc { color: #2b91af } /* Name.Class */
+.highlight .ow { color: #0000ff } /* Operator.Word */
+.highlight .sa { color: #a31515 } /* Literal.String.Affix */
+.highlight .sb { color: #a31515 } /* Literal.String.Backtick */
+.highlight .sc { color: #a31515 } /* Literal.String.Char */
+.highlight .dl { color: #a31515 } /* Literal.String.Delimiter */
+.highlight .sd { color: #a31515 } /* Literal.String.Doc */
+.highlight .s2 { color: #a31515 } /* Literal.String.Double */
+.highlight .se { color: #a31515 } /* Literal.String.Escape */
+.highlight .sh { color: #a31515 } /* Literal.String.Heredoc */
+.highlight .si { color: #a31515 } /* Literal.String.Interpol */
+.highlight .sx { color: #a31515 } /* Literal.String.Other */
+.highlight .sr { color: #a31515 } /* Literal.String.Regex */
+.highlight .s1 { color: #a31515 } /* Literal.String.Single */
+.highlight .ss { color: #a31515 } /* Literal.String.Symbol */
+
+.highlighter-rouge.language-javascript {
+  padding: 20px;
+  background: #f9f9f9;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+}
+    </style>
   </head>
   <body>
 
@@ -172,7 +345,7 @@ draw(0, 0, size, size);
 
       <script src="/dist/app.bundle.js"></script>
       <script>
-        var TMD = new TutorialMarkdownPlayer();
+        var TMD = new TutorialMarkdownPlayer({editorElement: document.querySelector('#code-area')});
       </script>
   </body>
 </html>

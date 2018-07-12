@@ -1,4 +1,4 @@
-// import CodeManager from './codeManager'
+import CodeManager from './codeManager'
 // import EditorManager from './editorManager'
 
 class TutorialMarkdown {
@@ -8,15 +8,15 @@ class TutorialMarkdown {
     this.currentStep = 0
 
     // Options
-    // let fakeOptions = {
-    //   editor: options.editor, //{monaco editor, created and on the document}
-    //   markdownSelector: {
-    //     block: '.tmd', // Selector for code blocks in the tutorial
-    //     code: '.code' // Selector for the code WITHIN the block
-    //   },
-    //   triggerPosition: 0.5, // position on screen for code to trigger.
-    //   iframe: options.executionWindow,
-    // }
+    let fakeOptions = {
+      editor: options.editor, //{monaco editor, created and on the document}
+      markdownSelector: {
+        block: '.tmd', // Selector for code blocks in the tutorial
+        code: '.code' // Selector for the code WITHIN the block
+      },
+      triggerPosition: 0.5, // position on screen for code to trigger.
+      iframe: options.executionWindow,
+    }
 
     this.scheduled = false
 
@@ -24,11 +24,11 @@ class TutorialMarkdown {
     // -- Used to send code to the editor
     // -- Used to erase code from the editor
 
-    // this.codeManager = new codeManager(options);
+    this.codeManager = new CodeManager(fakeOptions)
+
 
     this.throttleScroll = this.throttleScroll.bind(this)
-
-    window.addEventListener('scroll', this.throttleScroll)
+    this.create()
   }
 
   throttleScroll() {
@@ -43,6 +43,10 @@ class TutorialMarkdown {
 
   onScroll(){
     
+  }
+
+  create() {
+    window.addEventListener('scroll', this.throttleScroll)
   }
 
   destroy() {

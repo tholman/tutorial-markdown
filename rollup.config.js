@@ -10,11 +10,9 @@ export default {
     sourceMap: 'inline'
   },
   plugins: [
-    eslint({
-      exclude: []
-    }),
+    eslint({exclude: []}),
     babel({
       exclude: 'node_modules/**',
     })
   ]
-};
+}

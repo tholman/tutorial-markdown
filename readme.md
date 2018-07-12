@@ -12,9 +12,5 @@ The TMD player is initiated with JavaScript, for now, its recommended that you u
 
 #### Setup
 
-The tutorial markdown player contains an iframe, which your example will run within. Often, we want to set this up with some initial `styles`, and some initial `html`.
-
-This is done by adding `TMD-SETUP-HTML` & `TML-SETUP-STYLES` within code blocks at the start of the tutorial. These will be hidden by the players styles, and the player will inject them to the iframe before we even begin.
-
 #### Tutorial Steps
 

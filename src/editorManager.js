@@ -1,9 +1,4 @@
 
-// import only required items from below list
-// https://github.com/Microsoft/monaco-editor-samples/blob/master/browser-esm-webpack-small/index.js
-import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands.js';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js';
-
 class EditorManager {
 
   constructor(options) {
@@ -14,32 +9,32 @@ class EditorManager {
 
   setupEditor( editorElement ) {
     
-    self.MonacoEnvironment = {
-      getWorkerUrl: function (moduleId, label) {
-        return './editor.worker.bundle.js';
-      }
-    }
+    // self.MonacoEnvironment = {
+    //   getWorkerUrl: function (moduleId, label) {
+    //     return './editor.worker.bundle.js';
+    //   }
+    // }
 
-    this.editor = monaco.editor.create(editorElement, {
-      value: [
-        '// Welcome to Tutorial Markdown.',
-        '// start scrolling, and we\'ll',
-        '// write the code.'
-      ].join('\n'),
-      lineNumbersMinChars: 3,
-      scrollBeyondLastLine: false,
-      language: 'javascript',
-      fontSize: 10,
-      minimap: { enabled: false },
-      hover: false,
-      occurrencesHighlight: false
-    });
+    // this.editor = monaco.editor.create(editorElement, {
+    //   value: [
+    //     '// Welcome to Tutorial Markdown.',
+    //     '// start scrolling, and we\'ll',
+    //     '// write the code.'
+    //   ].join('\n'),
+    //   lineNumbersMinChars: 3,
+    //   scrollBeyondLastLine: false,
+    //   language: 'javascript',
+    //   fontSize: 10,
+    //   minimap: { enabled: false },
+    //   hover: false,
+    //   occurrencesHighlight: false
+    // });
 
-    this.editor.onKeyDown(function(e) {
-      this.hasTyped = true;
-    }.bind(this))
+    // this.editor.onKeyDown(function(e) {
+    //   this.hasTyped = true;
+    // }.bind(this))
 
-    this.editor.getModel().updateOptions({ tabSize: 2 })
+    // this.editor.getModel().updateOptions({ tabSize: 2 })
   }
 }
 

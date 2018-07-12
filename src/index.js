@@ -1,3 +1,3 @@
 
-import TutorialMarkdownPlayer from './tutorialMarkdownPlayer'
-module.exports = TutorialMarkdownPlayer
+import TutorialMarkdown from './tutorialMarkdown'
+module.exports = TutorialMarkdown

@@ -1,10 +1,10 @@
-/**
- * Code Manager, pieces together the code samples from the tutorial element
- */
+import CodeBlock from './codeBlock';
 
 class CodeManager {
 
+  
   constructor(options) {
+    this.codeBlocks = [];
   }
 }
 
@@ -69,7 +69,8 @@ export default CodeManager;
 //     saveCode(currentStep)
 
 //     window.addEventListener('scroll', onContentScroll);
-//     triggers = document.querySelectorAll('.tmd-trigger');
+//     trig
+
 //     blocks = document.querySelectorAll('.tmd');
 //     for( var i = 0; i < blocks.length; i++ ) {
 //       var blockElement = blocks[i];

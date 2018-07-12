@@ -5,13 +5,18 @@
   "repository": "https://github.com/tholman/tutorial-markdown.git",
   "author": "Tim Holman <timothy.w.holman@gmail.com>",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+     "build": "NODE_ENV=production rollup -c",
+     "watch": "rollup -c --watch"
+  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-es2015": "^6.24.1",
     "rollup": "^0.62.0",
-    "rollup-plugin-babel": "^3.0.7"
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-eslint": "^4.0.0",
+    "rollup-watch": "^4.3.1"
   },
   "dependencies": {}
 }

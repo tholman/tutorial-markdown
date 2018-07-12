@@ -1,14 +1,13 @@
-import CodeBlock from './codeBlock';
+import CodeBlock from './codeBlock'
 
 class CodeManager {
 
-  
-  constructor(options) {
-    this.codeBlocks = [];
+  constructor(/*options*/) {
+    // this.codeBlocks = []
   }
 }
 
-export default CodeManager;
+export default CodeManager
 
 // // (function() {
 

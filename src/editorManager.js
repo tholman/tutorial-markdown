@@ -3,11 +3,11 @@ class EditorManager {
 
   constructor(options) {
 
-    this.hasTyped = false;
-    this.setupEditor(options.editorElement);
+    this.hasTyped = false
+    this.setupEditor(options.editorElement)
   }
 
-  setupEditor( editorElement ) {
+  setupEditor( /*editorElement*/ ) {
     
     // self.MonacoEnvironment = {
     //   getWorkerUrl: function (moduleId, label) {
@@ -39,7 +39,7 @@ class EditorManager {
 }
 
 
-export default EditorManager;
+export default EditorManager
 
 // // (function() {
 

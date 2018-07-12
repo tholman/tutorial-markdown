@@ -1,7 +1,7 @@
 class CodeBlock {
-  constructor(element, options) {
+  constructor(/*element, options*/) {
 
   }
 }
 
-export default CodeBlock;
+export default CodeBlock

@@ -1,11 +1,18 @@
-import babel from 'rollup-plugin-babel';
+import babel from 'rollup-plugin-babel'
+import eslint from 'rollup-plugin-eslint'
 
 export default {
-  entry: 'src/index.js',
-  dest: 'dist/tutorialMarkdown.min.js',
-  format: 'iife',
-  sourceMap: 'inline',
+  input: 'src/index.js',
+  output: {
+    name: 'TutorialMarkdown',
+    file: 'dist/tutorialMarkdown.min.js',
+    format: 'iife',
+    sourceMap: 'inline'
+  },
   plugins: [
+    eslint({
+      exclude: []
+    }),
     babel({
       exclude: 'node_modules/**',
     })

@@ -12,7 +12,8 @@ class CodeBlock {
   }
 
   shouldBeActive() {
-    
+    const rect = this.element.getBoundingClientRect()
+    return (rect.y + rect.height/3) < (window.innerHeight / 2)
   }
 }
 

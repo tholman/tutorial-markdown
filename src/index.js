@@ -19,6 +19,7 @@ class TutorialMarkdown {
     }
 
     this.scheduled = false
+    this.currentStep = -1
 
     // this.editorManager = new EditorManager(options);
     // -- Used to send code to the editor
@@ -42,9 +43,17 @@ class TutorialMarkdown {
   }
 
   onScroll(){
-    // let currentStep = 0
-
+    const step = this.codeManager.getStep()
+    if( step > this.currentStep ) {
+      this.addCode(step)
+    }
     
+  }
+
+  addCode(step) {
+    // Editor ADD
+    // Iframe ADD
+    return step // Remove
   }
 
   create() {
@@ -105,41 +114,6 @@ export default TutorialMarkdown
 //     });
 
 //     bind();
-//   }
-
-//   function setupTutorial() {
-
-//     sendItButton = document.querySelector('.send-it');
-//     sendItButton.addEventListener('click', sendCode);
-
-//     structure = [];
-//     fullCodeSets = {};
-
-//     saveCode(currentStep)
-
-//     window.addEventListener('scroll', onContentScroll);
-//     triggers = document.querySelectorAll('.tmd-trigger');
-//     blocks = document.querySelectorAll('.tmd');
-//     for( var i = 0; i < blocks.length; i++ ) {
-//       var blockElement = blocks[i];
-      
-//       var blockStructure = {
-//         code: blockElement.innerHTML.replace('&gt;', '>').replace('&lt;', '<').replace('&lt;', '<'),
-//         action: blockElement.getAttribute('data-action'),
-//         from: parseInt(blockElement.getAttribute('data-from')),
-//         to: blockElement.getAttribute('data-to'),
-//         lines: blockElement.innerHTML.split('\n').length
-//       }
-
-//       if( blockStructure.to === 'all' ) {
-//         blockStructure.to = parseInt(blockStructure.from) + blockStructure.code.split('\n').length
-//       } else {
-//         blockStructure.to = parseInt(blockStructure.to);
-//       }
-
-//       structure.push(blockStructure)
-//     }
-
 //   }
 
 //   function onContentScroll(e) {

@@ -45,24 +45,45 @@
 
     createClass(CodeBlock, [{
       key: 'shouldBeActive',
-      value: function shouldBeActive() {}
+      value: function shouldBeActive() {
+        var rect = this.element.getBoundingClientRect();
+        return rect.y + rect.height / 3 < window.innerHeight / 2;
+      }
     }]);
     return CodeBlock;
   }();
 
-  var CodeManager = function CodeManager(options) {
-    classCallCheck(this, CodeManager);
+  var CodeManager = function () {
+    function CodeManager(options) {
+      classCallCheck(this, CodeManager);
 
-    this.codeBlocks = [];
-    this.blockSelector = options.blockSelector;
+      this.codeBlocks = [];
+      this.blockSelector = options.blockSelector;
 
-    var blockElements = document.querySelectorAll(this.blockSelector);
-    for (var i = 0; i < blockElements.length; i++) {
-      this.codeBlocks.push(new CodeBlock(blockElements[i], options.codeSelector));
+      var blockElements = document.querySelectorAll(this.blockSelector);
+      for (var i = 0; i < blockElements.length; i++) {
+        this.codeBlocks.push(new CodeBlock(blockElements[i], options.codeSelector));
+      }
     }
 
-    console.log(this.codeBlocks);
-  };
+    createClass(CodeManager, [{
+      key: 'getStep',
+      value: function getStep() {
+        for (var i = this.codeBlocks.length - 1; i >= 0; i--) {
+          if (this.codeBlocks[i].shouldBeActive()) {
+            return i;
+          }
+        }
+        return -1;
+      }
+    }, {
+      key: 'getBlockByStep',
+      value: function getBlockByStep(step) {
+        return this.codeBlocks[step];
+      }
+    }]);
+    return CodeManager;
+  }();
 
   var EditorManager = function () {
     function EditorManager(options) {
@@ -126,6 +147,7 @@
       };
 
       this.scheduled = false;
+      this.currentStep = -1;
 
       // this.editorManager = new EditorManager(options);
       // -- Used to send code to the editor
@@ -154,9 +176,17 @@
     }, {
       key: 'onScroll',
       value: function onScroll() {
-        // let currentStep = 0
-
-
+        var step = this.codeManager.getStep();
+        if (step > this.currentStep) {
+          this.addCode(step);
+        }
+      }
+    }, {
+      key: 'addCode',
+      value: function addCode(step) {
+        // Editor ADD
+        // Iframe ADD
+        return step; // Remove
       }
     }, {
       key: 'create',

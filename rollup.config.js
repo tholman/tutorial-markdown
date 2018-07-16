@@ -1,14 +1,8 @@
 import babel from 'rollup-plugin-babel'
 import eslint from 'rollup-plugin-eslint'
 
-export default {
+const config = {
   input: 'src/index.js',
-  output: {
-    name: 'TutorialMarkdown',
-    file: 'dist/tutorialMarkdown.min.js',
-    format: 'iife',
-    sourceMap: 'inline'
-  },
   plugins: [
     eslint({exclude: []}),
     babel({
@@ -16,3 +10,24 @@ export default {
     })
   ]
 }
+
+export default [
+  {
+    ...config,
+    output: {
+      format: 'umd',
+      name: 'TutorialMarkdown',
+      file: 'dist/tutorialMarkdown.umd.js',
+      sourcemap: true
+    }
+  },
+  // {
+  //   ...config,
+  //   output: {
+  //     format: 'es',
+  //     name: 'TutorialMarkdown',
+  //     file: 'dist/tutorialMarkdown.m.js',
+  //     sourcemap: true
+  //   }
+  // }
+]

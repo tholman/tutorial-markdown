@@ -1,5 +1,5 @@
 import CodeManager from './codeManager'
-// import EditorManager from './editorManager'
+import EditorManager from './editorManager'
 
 class TutorialMarkdown {
 
@@ -11,8 +11,8 @@ class TutorialMarkdown {
     let fakeOptions = {
       editor: options.editor, //{monaco editor, created and on the document}
       markdownSelector: {
-        block: '.tmd', // Selector for code blocks in the tutorial
-        code: '.code' // Selector for the code WITHIN the block
+        blockSelector: '.tmd', // Selector for code blocks in the tutorial
+        codeSelector: '.highlight' // Selector for the code WITHIN the block
       },
       triggerPosition: 0.5, // position on screen for code to trigger.
       iframe: options.executionWindow,
@@ -24,8 +24,8 @@ class TutorialMarkdown {
     // -- Used to send code to the editor
     // -- Used to erase code from the editor
 
-    this.codeManager = new CodeManager(fakeOptions)
-
+    this.codeManager = new CodeManager(fakeOptions.markdownSelector)
+    this.editorManager = new EditorManager(fakeOptions)
 
     this.throttleScroll = this.throttleScroll.bind(this)
     this.create()
@@ -42,6 +42,8 @@ class TutorialMarkdown {
   }
 
   onScroll(){
+    // let currentStep = 0
+
     
   }
 

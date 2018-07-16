@@ -2,7 +2,6 @@
 class EditorManager {
 
   constructor(options) {
-
     this.hasTyped = false
     this.setupEditor(options.editorElement)
   }

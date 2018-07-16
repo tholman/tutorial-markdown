@@ -2,8 +2,16 @@ import CodeBlock from './codeBlock'
 
 class CodeManager {
 
-  constructor(/*options*/) {
-    // this.codeBlocks = []
+  constructor(options) {
+    this.codeBlocks = []
+    this.blockSelector = options.blockSelector
+
+    let blockElements = document.querySelectorAll(this.blockSelector)
+    for( let i = 0; i < blockElements.length; i++ ) {
+      this.codeBlocks.push(new CodeBlock(blockElements[i], options.codeSelector))
+    }
+
+    console.log(this.codeBlocks)
   }
 }
 

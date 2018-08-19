@@ -3,6 +3,7 @@ class EditorManager {
 
   constructor(options) {
     this.hasTyped = false
+    this.lastExecuted = null
 
     const {editor} = options
     this.editor = editor.editor
@@ -15,14 +16,16 @@ class EditorManager {
 
   executeBlock(block) {
 
+    if(this.hasTyped) {
+      this.replaceWith(this.lastExecuted)
+    }
+
     // If we are trying to append beyond the current line count, add the lines
     const lineCount = this.editor.getModel().getLineCount()
     if(lineCount < block.from) {
       const linesNeeded = block.from - lineCount
-
       const range = new this.api.Range(block.from, 1, block.from + linesNeeded, 1)
       const newLines = '\n'.repeat(linesNeeded)
-
       const operation = {
         identifier: { major: 1, minor: 1 },
         range: range,
@@ -46,6 +49,20 @@ class EditorManager {
       block.from,
       block.from + block.lines
     )
+
+    // Save last state (to undo any manually typed code)
+    this.lastExecuted = this.getCode()
+  }
+
+  replaceWith(code) {
+    const range = new this.api.Range(0, 1, 9999, 1)
+    const operation = {
+      identifier: { major: 1, minor: 1 },
+      range: range,
+      text: code,
+      forceMoveMarkers: true
+    }
+    this.editor.executeEdits(code, [operation])
   }
 
   getCode() {

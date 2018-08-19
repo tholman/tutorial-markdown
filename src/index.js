@@ -18,6 +18,10 @@ class TutorialMarkdown {
       tabSize: editor.editor.getModel()._options.tabSize
     })
 
+    // Saving the post executed state, so when we step backwards we can
+    // reapply previous set information
+    this.savedSteps = [this.editorManager.getCode()]
+
     this.throttleScroll = this.throttleScroll.bind(this)
     this.create()
   }
@@ -32,25 +36,40 @@ class TutorialMarkdown {
     }
   }
 
-  onScroll(){
+  onScroll() {
     const step = this.codeManager.getStep()
     if(step > this.currentStep) {
-      this.stepForward(step)
+
+      for( let i = this.currentStep + 1; i <= step; i++ ) {
+        this.stepForward(i)
+      }
+      
     } else if (step < this.currentStep) {
       this.stepBackward(step)
     }
+
     this.currentStep = step
   }
 
   stepForward(step) {
     const block = this.codeManager.getBlockByStep(step)
     this.editorManager.executeBlock(block)
-    this.iframeManager.sendCode(this.editorManager.getCode())
+
+    const currentCode = this.editorManager.getCode()
+
+    if(!this.savedSteps[step + 1]) {
+      this.savedSteps.push(currentCode)
+    }
+
+    this.iframeManager.sendCode(currentCode)
+
     return step
   }
 
   stepBackward(step) {
-
+    this.editorManager.replaceWith(this.savedSteps[step + 1])
+    const currentCode = this.editorManager.getCode()
+    this.iframeManager.sendCode(currentCode)
   }
 
   create() {
@@ -115,46 +134,9 @@ export default TutorialMarkdown
 //     hasTyped = false;
 //   }
 
-//   function onCodeAdd(step) {
-
-//     if( hasTyped === true ) {
-//       onCodeRemove(step);
-//     }
-
-//     // Positioning the instructions
-//     var instructions = structure[step];
-
-//     var range = new monaco.Range(instructions.from, 1, instructions.to, 1);
-//     var id = { major: 1, minor: 1 };           
-//     var op = {identifier: id, range: range, text: instructions.code, forceMoveMarkers: true};
-//     editor.executeEdits(instructions.code, [op]);
-
-//     editor.revealLines(instructions.from, instructions.from + instructions.lines);
-//     sendCode();
-//     saveCode(step);
-//   }
-
-//   function onCodeReverse(step) {
-//     console.log("remove!");
-//   }
-
-//   function sendCode() {
-//     var value = editor.getValue()
-    
-//     frame.contentWindow.postMessage(value, "*")
-//   }
-
 //   function saveCode(step) {
 
 //     // Only save these ones per each step.
 //     if( !fullCodeSets[step] ) {
 //       fullCodeSets[step] = editor.getValue();
 //     }
-
-//   }
-
-//   function bind() {}
-
-//   setup();
-
-// // })();

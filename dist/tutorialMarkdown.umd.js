@@ -118,6 +118,7 @@
       classCallCheck(this, EditorManager);
 
       this.hasTyped = false;
+      this.lastExecuted = null;
 
       var editor = options.editor;
 
@@ -133,14 +134,16 @@
       key: 'executeBlock',
       value: function executeBlock(block) {
 
+        if (this.hasTyped) {
+          this.replaceWith(this.lastExecuted);
+        }
+
         // If we are trying to append beyond the current line count, add the lines
         var lineCount = this.editor.getModel().getLineCount();
         if (lineCount < block.from) {
           var linesNeeded = block.from - lineCount;
-
           var _range = new this.api.Range(block.from, 1, block.from + linesNeeded, 1);
           var newLines = '\n'.repeat(linesNeeded);
-
           var _operation = {
             identifier: { major: 1, minor: 1 },
             range: _range,
@@ -161,6 +164,21 @@
 
         this.editor.executeEdits(block.code, [operation]);
         this.editor.revealLines(block.from, block.from + block.lines);
+
+        // Save last state (to undo any manually typed code)
+        this.lastExecuted = this.getCode();
+      }
+    }, {
+      key: 'replaceWith',
+      value: function replaceWith(code) {
+        var range = new this.api.Range(0, 1, 9999, 1);
+        var operation = {
+          identifier: { major: 1, minor: 1 },
+          range: range,
+          text: code,
+          forceMoveMarkers: true
+        };
+        this.editor.executeEdits(code, [operation]);
       }
     }, {
       key: 'getCode',
@@ -203,6 +221,10 @@
         tabSize: editor.editor.getModel()._options.tabSize
       });
 
+      // Saving the post executed state, so when we step backwards we can
+      // reapply previous set information
+      this.savedSteps = [this.editorManager.getCode()];
+
       this.throttleScroll = this.throttleScroll.bind(this);
       this.create();
     }
@@ -225,10 +247,14 @@
       value: function onScroll() {
         var step = this.codeManager.getStep();
         if (step > this.currentStep) {
-          this.stepForward(step);
+
+          for (var i = this.currentStep + 1; i <= step; i++) {
+            this.stepForward(i);
+          }
         } else if (step < this.currentStep) {
           this.stepBackward(step);
         }
+
         this.currentStep = step;
       }
     }, {
@@ -236,12 +262,24 @@
       value: function stepForward(step) {
         var block = this.codeManager.getBlockByStep(step);
         this.editorManager.executeBlock(block);
-        this.iframeManager.sendCode(this.editorManager.getCode());
+
+        var currentCode = this.editorManager.getCode();
+
+        if (!this.savedSteps[step + 1]) {
+          this.savedSteps.push(currentCode);
+        }
+
+        this.iframeManager.sendCode(currentCode);
+
         return step;
       }
     }, {
       key: 'stepBackward',
-      value: function stepBackward(step) {}
+      value: function stepBackward(step) {
+        this.editorManager.replaceWith(this.savedSteps[step + 1]);
+        var currentCode = this.editorManager.getCode();
+        this.iframeManager.sendCode(currentCode);
+      }
     }, {
       key: 'create',
       value: function create() {

@@ -29,13 +29,15 @@
   }();
 
   var CodeBlock = function () {
-    function CodeBlock(element, codeSelector) {
+    function CodeBlock(element, codeSelector, tabSize) {
       classCallCheck(this, CodeBlock);
 
       this.element = element;
-      this.code = element.querySelector(codeSelector).innerText;
       this.from = parseInt(element.getAttribute('data-from'));
       this.to = element.getAttribute('data-to');
+      this.indent = parseInt(element.getAttribute('data-indent')) || 0;
+
+      this.code = this.prepareCode(element.querySelector(codeSelector).innerText, tabSize);
       this.lines = this.code.split('\n').length;
 
       // Set "TO" value to from + lines it isn't set
@@ -43,6 +45,24 @@
     }
 
     createClass(CodeBlock, [{
+      key: 'prepareCode',
+      value: function prepareCode(code, tabSize) {
+        var _this = this;
+
+        var parsedCode = code.split('\n');
+
+        // Add indentation
+        parsedCode = parsedCode.map(function (string) {
+          if (string !== '') {
+            return ' '.repeat(tabSize * _this.indent) + string;
+          } else {
+            return string;
+          }
+        });
+
+        return parsedCode.join('\n');
+      }
+    }, {
       key: 'shouldBeActive',
       value: function shouldBeActive() {
         var rect = this.element.getBoundingClientRect();
@@ -59,11 +79,16 @@
       classCallCheck(this, CodeManager);
 
       this.codeBlocks = [];
+      var _options$selectors = options.selectors,
+          blockSelector = _options$selectors.blockSelector,
+          codeSelector = _options$selectors.codeSelector;
+
+
       this.blockSelector = options.blockSelector;
 
-      var blockElements = document.querySelectorAll(this.blockSelector);
+      var blockElements = document.querySelectorAll(blockSelector);
       for (var i = 0; i < blockElements.length; i++) {
-        this.codeBlocks.push(new CodeBlock(blockElements[i], options.codeSelector));
+        this.codeBlocks.push(new CodeBlock(blockElements[i], codeSelector, options.tabSize));
       }
     }
 
@@ -99,18 +124,33 @@
       this.editor = editor.editor;
       this.api = editor.api;
 
-      this.options = {
-        tabSize: this.editor.getModel()._options.tabSize
-      };
-
       this.editor.onKeyDown(function () {
         _this.hasTyped = true;
       });
     }
 
     createClass(EditorManager, [{
-      key: "executeBlock",
+      key: 'executeBlock',
       value: function executeBlock(block) {
+
+        // If we are trying to append beyond the current line count, add the lines
+        var lineCount = this.editor.getModel().getLineCount();
+        if (lineCount < block.from) {
+          var linesNeeded = block.from - lineCount;
+
+          var _range = new this.api.Range(block.from, 1, block.from + linesNeeded, 1);
+          var newLines = '\n'.repeat(linesNeeded);
+
+          var _operation = {
+            identifier: { major: 1, minor: 1 },
+            range: _range,
+            text: newLines,
+            forceMoveMarkers: true
+          };
+
+          this.editor.executeEdits(newLines, [_operation]);
+        }
+
         var range = new this.api.Range(block.from, 1, block.to, 1);
         var operation = {
           identifier: { major: 1, minor: 1 },
@@ -123,7 +163,7 @@
         this.editor.revealLines(block.from, block.from + block.lines);
       }
     }, {
-      key: "getCode",
+      key: 'getCode',
       value: function getCode() {
         return this.editor.getValue();
       }
@@ -156,8 +196,12 @@
       this.currentStep = -1;
 
       this.editorManager = new EditorManager({ editor: editor });
-      this.codeManager = new CodeManager(options.markdownSelector);
       this.iframeManager = new IframeManager({ iframe: options.iframe });
+
+      this.codeManager = new CodeManager({
+        selectors: options.markdownSelector,
+        tabSize: editor.editor.getModel()._options.tabSize
+      });
 
       this.throttleScroll = this.throttleScroll.bind(this);
       this.create();

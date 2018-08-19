@@ -1,13 +1,32 @@
 class CodeBlock {
-  constructor(element, codeSelector) {
+  constructor(element, codeSelector, tabSize) {
     this.element = element
-    this.code = element.querySelector(codeSelector).innerText
     this.from = parseInt(element.getAttribute('data-from'))
     this.to = element.getAttribute('data-to')
+    this.indent = parseInt(element.getAttribute('data-indent')) || 0
+
+    this.code = this.prepareCode(element.querySelector(codeSelector).innerText, tabSize)
     this.lines = this.code.split('\n').length
 
     // Set "TO" value to from + lines it isn't set
     this.to = this.to ? parseInt(this.to) : this.from + this.lines 
+  }
+
+  prepareCode(code, tabSize) {
+    let parsedCode = code.split('\n')
+    
+    // Add indentation
+    parsedCode = parsedCode.map(
+      string => {
+        if( string !== ''){
+          return ' '.repeat(tabSize * this.indent) + string
+        } else {
+          return string
+        }
+      }
+    )
+
+    return parsedCode.join('\n')
   }
 
   shouldBeActive() {

@@ -11,8 +11,12 @@ class TutorialMarkdown {
     this.currentStep = -1
 
     this.editorManager = new EditorManager({editor})
-    this.codeManager = new CodeManager(options.markdownSelector)
     this.iframeManager = new IframeManager({iframe: options.iframe})
+
+    this.codeManager = new CodeManager({
+      selectors: options.markdownSelector,
+      tabSize: editor.editor.getModel()._options.tabSize
+    })
 
     this.throttleScroll = this.throttleScroll.bind(this)
     this.create()

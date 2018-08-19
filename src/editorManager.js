@@ -8,16 +8,31 @@ class EditorManager {
     this.editor = editor.editor
     this.api = editor.api
 
-    this.options = {
-      tabSize: this.editor.getModel()._options.tabSize
-    }
-
     this.editor.onKeyDown(() => {
       this.hasTyped = true
     })
   }
 
   executeBlock(block) {
+
+    // If we are trying to append beyond the current line count, add the lines
+    const lineCount = this.editor.getModel().getLineCount()
+    if(lineCount < block.from) {
+      const linesNeeded = block.from - lineCount
+
+      const range = new this.api.Range(block.from, 1, block.from + linesNeeded, 1)
+      const newLines = '\n'.repeat(linesNeeded)
+
+      const operation = {
+        identifier: { major: 1, minor: 1 },
+        range: range,
+        text: newLines,
+        forceMoveMarkers: true
+      }
+
+      this.editor.executeEdits(newLines, [operation])
+    }
+
     const range = new this.api.Range(block.from, 1, block.to, 1)
     const operation = {
       identifier: { major: 1, minor: 1 },

@@ -20,14 +20,5 @@ export default [
       file: 'dist/tutorialMarkdown.umd.js',
       sourcemap: true
     }
-  },
-  // {
-  //   ...config,
-  //   output: {
-  //     format: 'es',
-  //     name: 'TutorialMarkdown',
-  //     file: 'dist/tutorialMarkdown.m.js',
-  //     sourcemap: true
-  //   }
-  // }
+  }
 ]

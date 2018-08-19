@@ -34,12 +34,11 @@
 
       this.element = element;
       this.code = element.querySelector(codeSelector).innerText;
-      this.action = element.getAttribute('data-action');
       this.from = parseInt(element.getAttribute('data-from'));
       this.to = element.getAttribute('data-to');
       this.lines = this.code.split('\n').length;
 
-      // Set "TO" value if it isn't set
+      // Set "TO" value to from + lines it isn't set
       this.to = this.to ? parseInt(this.to) : this.from + this.lines;
     }
 
@@ -47,6 +46,8 @@
       key: 'shouldBeActive',
       value: function shouldBeActive() {
         var rect = this.element.getBoundingClientRect();
+
+        // 1/3 of rect is at 1/2 of window
         return rect.y + rect.height / 3 < window.innerHeight / 2;
       }
     }]);
@@ -87,74 +88,76 @@
 
   var EditorManager = function () {
     function EditorManager(options) {
+      var _this = this;
+
       classCallCheck(this, EditorManager);
 
       this.hasTyped = false;
-      this.setupEditor(options.editorElement);
+
+      var editor = options.editor;
+
+      this.editor = editor.editor;
+      this.api = editor.api;
+
+      this.options = {
+        tabSize: this.editor.getModel()._options.tabSize
+      };
+
+      this.editor.onKeyDown(function () {
+        _this.hasTyped = true;
+      });
     }
 
     createClass(EditorManager, [{
-      key: "setupEditor",
-      value: function setupEditor() /*editorElement*/{
+      key: "executeBlock",
+      value: function executeBlock(block) {
+        var range = new this.api.Range(block.from, 1, block.to, 1);
+        var operation = {
+          identifier: { major: 1, minor: 1 },
+          range: range,
+          text: block.code,
+          forceMoveMarkers: true
+        };
 
-        // self.MonacoEnvironment = {
-        //   getWorkerUrl: function (moduleId, label) {
-        //     return './editor.worker.bundle.js';
-        //   }
-        // }
-
-        // this.editor = monaco.editor.create(editorElement, {
-        //   value: [
-        //     '// Welcome to Tutorial Markdown.',
-        //     '// start scrolling, and we\'ll',
-        //     '// write the code.'
-        //   ].join('\n'),
-        //   lineNumbersMinChars: 3,
-        //   scrollBeyondLastLine: false,
-        //   language: 'javascript',
-        //   fontSize: 10,
-        //   minimap: { enabled: false },
-        //   hover: false,
-        //   occurrencesHighlight: false
-        // });
-
-        // this.editor.onKeyDown(function(e) {
-        //   this.hasTyped = true;
-        // }.bind(this))
-
-        // this.editor.getModel().updateOptions({ tabSize: 2 })
+        this.editor.executeEdits(block.code, [operation]);
+        this.editor.revealLines(block.from, block.from + block.lines);
+      }
+    }, {
+      key: "getCode",
+      value: function getCode() {
+        return this.editor.getValue();
       }
     }]);
     return EditorManager;
   }();
 
+  var IframeManager = function () {
+    function IframeManager(options) {
+      classCallCheck(this, IframeManager);
+
+      this.iframe = options.iframe;
+    }
+
+    createClass(IframeManager, [{
+      key: 'sendCode',
+      value: function sendCode(code) {
+        this.iframe.contentWindow.postMessage(code, '*');
+      }
+    }]);
+    return IframeManager;
+  }();
+
   var TutorialMarkdown = function () {
     function TutorialMarkdown(options) {
       classCallCheck(this, TutorialMarkdown);
-
-
-      this.currentStep = 0;
-
-      // Options
-      var fakeOptions = {
-        editor: options.editor, //{monaco editor, created and on the document}
-        markdownSelector: {
-          blockSelector: '.tmd', // Selector for code blocks in the tutorial
-          codeSelector: '.highlight' // Selector for the code WITHIN the block
-        },
-        triggerPosition: 0.5, // position on screen for code to trigger.
-        iframe: options.executionWindow
-      };
+      var editor = options.editor;
 
       this.scheduled = false;
       this.currentStep = -1;
 
-      // this.editorManager = new EditorManager(options);
-      // -- Used to send code to the editor
-      // -- Used to erase code from the editor
-
-      this.codeManager = new CodeManager(fakeOptions.markdownSelector);
-      this.editorManager = new EditorManager(fakeOptions);
+      this.editorManager = new EditorManager({ editor: editor });
+      this.codeManager = new CodeManager(options.markdownSelector);
+      this.iframeManager = new IframeManager({ iframe: options.iframe });
 
       this.throttleScroll = this.throttleScroll.bind(this);
       this.create();
@@ -178,16 +181,23 @@
       value: function onScroll() {
         var step = this.codeManager.getStep();
         if (step > this.currentStep) {
-          this.addCode(step);
+          this.stepForward(step);
+        } else if (step < this.currentStep) {
+          this.stepBackward(step);
         }
+        this.currentStep = step;
       }
     }, {
-      key: 'addCode',
-      value: function addCode(step) {
-        // Editor ADD
-        // Iframe ADD
-        return step; // Remove
+      key: 'stepForward',
+      value: function stepForward(step) {
+        var block = this.codeManager.getBlockByStep(step);
+        this.editorManager.executeBlock(block);
+        this.iframeManager.sendCode(this.editorManager.getCode());
+        return step;
       }
+    }, {
+      key: 'stepBackward',
+      value: function stepBackward(step) {}
     }, {
       key: 'create',
       value: function create() {

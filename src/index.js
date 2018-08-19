@@ -1,32 +1,18 @@
 import CodeManager from './codeManager'
 import EditorManager from './editorManager'
+import IframeManager from './iframeManager'
 
 class TutorialMarkdown {
 
   constructor(options) {
 
-    this.currentStep = 0
-
-    // Options
-    let fakeOptions = {
-      editor: options.editor, //{monaco editor, created and on the document}
-      markdownSelector: {
-        blockSelector: '.tmd', // Selector for code blocks in the tutorial
-        codeSelector: '.highlight' // Selector for the code WITHIN the block
-      },
-      triggerPosition: 0.5, // position on screen for code to trigger.
-      iframe: options.executionWindow,
-    }
-
+    const {editor} = options
     this.scheduled = false
     this.currentStep = -1
 
-    // this.editorManager = new EditorManager(options);
-    // -- Used to send code to the editor
-    // -- Used to erase code from the editor
-
-    this.codeManager = new CodeManager(fakeOptions.markdownSelector)
-    this.editorManager = new EditorManager(fakeOptions)
+    this.editorManager = new EditorManager({editor})
+    this.codeManager = new CodeManager(options.markdownSelector)
+    this.iframeManager = new IframeManager({iframe: options.iframe})
 
     this.throttleScroll = this.throttleScroll.bind(this)
     this.create()
@@ -44,16 +30,23 @@ class TutorialMarkdown {
 
   onScroll(){
     const step = this.codeManager.getStep()
-    if( step > this.currentStep ) {
-      this.addCode(step)
+    if(step > this.currentStep) {
+      this.stepForward(step)
+    } else if (step < this.currentStep) {
+      this.stepBackward(step)
     }
-    
+    this.currentStep = step
   }
 
-  addCode(step) {
-    // Editor ADD
-    // Iframe ADD
-    return step // Remove
+  stepForward(step) {
+    const block = this.codeManager.getBlockByStep(step)
+    this.editorManager.executeBlock(block)
+    this.iframeManager.sendCode(this.editorManager.getCode())
+    return step
+  }
+
+  stepBackward(step) {
+
   }
 
   create() {
@@ -82,38 +75,6 @@ export default TutorialMarkdown
 
 //   function setup() {
 //     setupCode();
-//   }
-
-//   function setupCode() {
-//     require.config({ paths: { 'vs': '/js/libs/monaco-editor/vs' }});
-//     require(['vs/editor/editor.main'], function() {
-//       editor = monaco.editor.create(document.getElementById('code-area'), {
-//         value: [
-//           '// Welcome to Tutorial Markdown.',
-//           '// start scrolling, and we\'ll',
-//           '// write the code.'
-//         ].join('\n'),
-//         lineNumbersMinChars: 3,
-//         scrollBeyondLastLine: false,
-//         language: 'javascript',
-//         fontSize: 10,
-//         minimap: {
-//           enabled: false
-//         },
-//         hover: false,
-//         occurrencesHighlight: false
-//       });
-
-//       editor.onKeyDown(function(e) {
-//         hasTyped = true;
-//       })
-
-//       editor.getModel().updateOptions({ tabSize: 2 })
-
-//       setupTutorial();
-//     });
-
-//     bind();
 //   }
 
 //   function onContentScroll(e) {

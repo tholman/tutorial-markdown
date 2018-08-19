@@ -3,37 +3,38 @@ class EditorManager {
 
   constructor(options) {
     this.hasTyped = false
-    this.setupEditor(options.editorElement)
+
+    const {editor} = options
+    this.editor = editor.editor
+    this.api = editor.api
+
+    this.options = {
+      tabSize: this.editor.getModel()._options.tabSize
+    }
+
+    this.editor.onKeyDown(() => {
+      this.hasTyped = true
+    })
   }
 
-  setupEditor( /*editorElement*/ ) {
+  executeBlock(block) {
+    const range = new this.api.Range(block.from, 1, block.to, 1)
+    const operation = {
+      identifier: { major: 1, minor: 1 },
+      range: range,
+      text: block.code,
+      forceMoveMarkers: true
+    }
     
-    // self.MonacoEnvironment = {
-    //   getWorkerUrl: function (moduleId, label) {
-    //     return './editor.worker.bundle.js';
-    //   }
-    // }
+    this.editor.executeEdits(block.code, [operation])
+    this.editor.revealLines(
+      block.from,
+      block.from + block.lines
+    )
+  }
 
-    // this.editor = monaco.editor.create(editorElement, {
-    //   value: [
-    //     '// Welcome to Tutorial Markdown.',
-    //     '// start scrolling, and we\'ll',
-    //     '// write the code.'
-    //   ].join('\n'),
-    //   lineNumbersMinChars: 3,
-    //   scrollBeyondLastLine: false,
-    //   language: 'javascript',
-    //   fontSize: 10,
-    //   minimap: { enabled: false },
-    //   hover: false,
-    //   occurrencesHighlight: false
-    // });
-
-    // this.editor.onKeyDown(function(e) {
-    //   this.hasTyped = true;
-    // }.bind(this))
-
-    // this.editor.getModel().updateOptions({ tabSize: 2 })
+  getCode() {
+    return this.editor.getValue()
   }
 }
 

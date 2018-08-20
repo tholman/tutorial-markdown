@@ -235,6 +235,7 @@
       this.savedSteps = [this.editorManager.getCode()];
 
       this.throttleScroll = this.throttleScroll.bind(this);
+      this.sendCode = this.sendCode.bind(this);
       this.create();
     }
 

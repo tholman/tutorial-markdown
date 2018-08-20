@@ -24,6 +24,8 @@ Currently tutorial markdown only supports windows [monaco editor]() ... although
 
 The "iframe" is an iframe on your page, set up by you with the html you want to run your tutorial. In this iframe, you'll need some code that handles tutorialMarkdown sending messages to it. This can be found in [dist]() ... In the examples on [generativeArtistry]() you can see this set up with a canvas.
 
+The Iframe needs to have the `iframe.js` script included in dist, within the file, this lets it recieve the code and add it during each step.
+
 ### 3. Correct tutorial markdown initiation and variables
 
 Once you have included the tutorial markdown js file (available in /dist) you'll need to initialize it, here's an example.

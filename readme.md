@@ -59,3 +59,5 @@ All together these will make tutorial markdown work.
 In order to keep things simpler, there are certain pieces that tutorial markdown is not running, for example, how your page is styled. In the example you can see the editor and iframe set up in a way that keeps them on the page (with position sticky) you will need to do the same.
 
 The iframe itself needs to be styled and set up by you. In the examples this includes adding a canvas, and styling it to take up the full frame.
+
+There is an additional function you may call on your TutorialMarkdown instance, named `sendCode` calling this will re-send whatever is in the editor to the iframe. This can be seen in [generative artistry](https://generativeartistry.com), clicking the small arrow means that people can edit their own code, and send the result. Anything sent will be forgotten when another code block is sent to the editor.

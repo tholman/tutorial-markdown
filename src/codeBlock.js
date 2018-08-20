@@ -5,7 +5,16 @@ class CodeBlock {
     this.to = element.getAttribute('data-to')
     this.indent = parseInt(element.getAttribute('data-indent')) || 0
 
-    this.code = this.prepareCode(element.querySelector(codeSelector).innerText, tabSize)
+    let code = null
+    if( codeSelector ) {
+      code = element.querySelector(codeSelector).innerText
+    } else {
+      code = element.innerText
+    }
+
+    this.code = this.prepareCode(code, tabSize)
+
+
     this.lines = this.code.split('\n').length
 
     // Set "TO" value to from + lines it isn't set

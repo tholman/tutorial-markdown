@@ -18,11 +18,13 @@ There are only a few data attributes that tutorial markdown runs off
 1. `data-to` (optional) if you set a data-to all code between the from and to line will be replaced with your new code
 1. `data-indent` (optional) indents your code to the level, so you don't need to indent code blocks needlessly in the markdown.
 
+You can see examples of these in the [generative artistry posts](https://raw.githubusercontent.com/tholman/generative-artistry/master/content/tutorials/tiled-lines.md) ... for example, in the previous link, there is the line `<div class="tmd-trigger" data-from="10" data-to="11" data-indent="1">...</div>`, inside this div is the code I want to send to the editor and iframe. The `data-from` says, start from line 10, and the `data-to` says, replace all code between line 10 and 11 with the contents.
+
 ### 2. The `editor` and `iframe` on the page
 
-Currently tutorial markdown only supports windows [monaco editor]() ... although its been built to have others in mind, the [support]() isn't implemented just yet. You will need to initialize a new "editor" and have the variable on hand.
+Currently tutorial markdown only supports windows [monaco editor](https://github.com/Microsoft/monaco-editor) ... although its been built to have others in mind, the support isn't implemented just yet. You will need to initialize a new "editor" and have the variable on hand.
 
-The "iframe" is an iframe on your page, set up by you with the html you want to run your tutorial. In this iframe, you'll need some code that handles tutorialMarkdown sending messages to it. This can be found in [dist]() ... In the examples on [generativeArtistry]() you can see this set up with a canvas.
+The "iframe" is an iframe on your page, set up by you with the html you want to run your tutorial. In this iframe, you'll need some code that handles tutorialMarkdown sending messages to it. This can be found in [dist](https://github.com/tholman/tutorial-markdown/blob/master/dist/iframe.js) ... In the examples on [generativeArtistry](https://github.com/tholman/generative-artistry/blob/master/themes/generative-artistry/static/utils/injectable-iframe.html) you can see this set up with a canvas.
 
 The Iframe needs to have the `iframe.js` script included in dist, within the file, this lets it recieve the code and add it during each step.
 

@@ -17,6 +17,7 @@ class EditorManager {
   executeBlock(block) {
 
     if(this.hasTyped) {
+      this.hasTyped = false
       this.replaceWith(this.lastExecuted)
     }
 

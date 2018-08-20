@@ -143,6 +143,7 @@
       value: function executeBlock(block) {
 
         if (this.hasTyped) {
+          this.hasTyped = false;
           this.replaceWith(this.lastExecuted);
         }
 
@@ -297,6 +298,12 @@
       key: 'destroy',
       value: function destroy() {
         window.removeEventListener('scroll', this.throttleScroll);
+      }
+    }, {
+      key: 'sendCode',
+      value: function sendCode() {
+        var currentCode = this.editorManager.getCode();
+        this.iframeManager.sendCode(currentCode);
       }
     }]);
     return TutorialMarkdown;

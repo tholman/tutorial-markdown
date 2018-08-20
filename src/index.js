@@ -79,6 +79,11 @@ class TutorialMarkdown {
   destroy() {
     window.removeEventListener('scroll', this.throttleScroll)
   }
+
+  sendCode() {
+    const currentCode = this.editorManager.getCode()
+    this.iframeManager.sendCode(currentCode)
+  }
 }
 
 export default TutorialMarkdown

@@ -35,7 +35,14 @@ class CodeBlock {
       }
     )
 
-    return parsedCode.join('\n')
+    parsedCode = parsedCode.join('\n')
+
+    // If the last item isn't a new line, add it
+    if( parsedCode[parsedCode.length-1] !== '\n' ) {
+      parsedCode += '\n'
+    }
+
+    return parsedCode
   }
 
   shouldBeActive() {

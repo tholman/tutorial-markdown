@@ -1,24 +1,22 @@
 import babel from 'rollup-plugin-babel'
-import eslint from 'rollup-plugin-eslint'
+import { eslint } from 'rollup-plugin-eslint'
 
 const config = {
   input: 'src/index.js',
   plugins: [
-    eslint({exclude: []}),
+    eslint({ exclude: [] }),
     babel({
       exclude: 'node_modules/**',
     })
   ]
 }
 
-export default [
-  {
-    ...config,
-    output: {
-      format: 'umd',
-      name: 'TutorialMarkdown',
-      file: 'dist/tutorialMarkdown.umd.js',
-      sourcemap: true
-    }
+export default [{
+  ...config,
+  output: {
+    format: 'umd',
+    name: 'TutorialMarkdown',
+    file: 'dist/tutorialMarkdown.umd.js',
+    sourcemap: true
   }
-]
+}]
